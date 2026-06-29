@@ -1,1 +1,356 @@
+// Singleton Pattern
+public class Logger {
 
+    private static Logger instance;
+
+    private Logger() {
+        System.out.println("Logger Created");
+    }
+
+    public static Logger getInstance() {
+        if (instance == null) {
+            instance = new Logger();
+        }
+        return instance;
+    }
+
+    public void log(String msg) {
+        System.out.println(msg);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+
+        Logger l1 = Logger.getInstance();
+        Logger l2 = Logger.getInstance();
+
+        l1.log("Hello");
+
+        System.out.println(l1 == l2);
+    }
+}
+//Factory Method Pattern
+public interface Document {
+    void open();
+}
+public class WordDocument implements Document {
+
+    @Override
+    public void open() {
+        System.out.println("Opening Word Document");
+    }
+}
+public class PdfDocument implements Document {
+
+    @Override
+    public void open() {
+        System.out.println("Opening PDF Document");
+    }
+}
+public class ExcelDocument implements Document {
+
+    @Override
+    public void open() {
+        System.out.println("Opening Excel Document");
+    }
+}
+public class Main {
+
+    public static void main(String[] args) {
+
+        DocumentFactory factory = new PdfFactory();
+        factory.openDocument();
+    }
+}
+// E-Commerce Platform Search Function (Linear Search)
+public class Product {
+
+    int id;
+    String name;
+    String category;
+
+    public Product(int id, String name, String category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+    }
+}
+public class Search {
+
+    public static Product linearSearch(Product[] products, String name) {
+
+        for(Product p : products) {
+            if(p.name.equalsIgnoreCase(name))
+                return p;
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+
+        Product[] products = {
+                new Product(1,"Laptop","Electronics"),
+                new Product(2,"Mobile","Electronics"),
+                new Product(3,"Shoes","Fashion")
+        };
+
+        Product p = linearSearch(products,"Mobile");
+
+        if(p!=null)
+            System.out.println(p.id+" "+p.name);
+        else
+            System.out.println("Not Found");
+    }
+}
+//Financial Forecasting (Recursion)
+public class Forecast {
+
+    public static double futureValue(double amount,double rate,int years){
+
+        if(years==0)
+            return amount;
+
+        return futureValue(amount*(1+rate),rate,years-1);
+    }
+
+    public static void main(String[] args){
+
+        double result = futureValue(10000,0.10,5);
+
+        System.out.println(result);
+    }
+}
+//5. PL/SQL Control Structures
+DECLARE
+    num NUMBER := 10;
+BEGIN
+    IF num > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Positive');
+    ELSIF num = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Zero');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Negative');
+    END IF;
+END;
+/
+BEGIN
+    FOR i IN 1..5 LOOP
+        DBMS_OUTPUT.PUT_LINE(i);
+    END LOOP;
+END;
+/
+//PL/SQL Stored Procedure
+CREATE TABLE Employee(
+    empid NUMBER,
+    name VARCHAR2(50),
+    salary NUMBER
+);
+INSERT INTO Employee VALUES(101,'John',50000);
+COMMIT;
+CREATE OR REPLACE PROCEDURE GetSalary(
+    p_empid IN NUMBER
+)
+IS
+    v_salary NUMBER;
+BEGIN
+    SELECT salary
+    INTO v_salary
+    FROM Employee
+    WHERE empid=p_empid;
+
+    DBMS_OUTPUT.PUT_LINE('Salary = '||v_salary);
+END;
+/
+BEGIN
+    GetSalary(101);
+END;
+/
+//JUnit 5 – Setting Up JUnit
+public class Calculator {
+
+    public int add(int a,int b){
+        return a+b;
+    }
+}
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CalculatorTest {
+
+    Calculator c = new Calculator();
+
+    @Test
+    void testAdd() {
+        assertEquals(5,c.add(2,3));
+    }
+}
+//JUnit Assertions
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AssertionTest {
+
+    @Test
+    void testAssertions(){
+
+        assertEquals(10,5+5);
+
+        assertTrue(20>10);
+
+        assertFalse(2>5);
+
+        assertNull(null);
+
+        assertNotNull(new Object());
+    }
+}
+//AAA Pattern + Setup + Teardown
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculatorTest {
+
+    Calculator c;
+
+    @BeforeEach
+    void setup(){
+        c=new Calculator();
+    }
+
+    @AfterEach
+    void tearDown(){
+        System.out.println("Completed");
+    }
+
+    @Test
+    void testAdd(){
+
+        // Arrange
+        int a=5,b=3;
+
+        // Act
+        int result=c.add(a,b);
+
+        // Assert
+        assertEquals(8,result);
+    }
+}
+//tear down methods
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class CalculatorTest {
+
+    Calculator calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new Calculator();
+        System.out.println("Setup: Calculator object created");
+    }
+
+    @Test
+    void testAdd() {
+        assertEquals(8, calculator.add(5, 3));
+        System.out.println("Test Executed");
+    }
+
+    @AfterEach
+    void tearDown() {
+        calculator = null;   // Cleanup
+        System.out.println("TearDown: Resources cleaned");
+    }
+}
+
+//Mockito – Mocking and Stubbing
+public interface ExternalApi {
+    String getData();
+}
+public class Service {
+
+    ExternalApi api;
+
+    public Service(ExternalApi api){
+        this.api=api;
+    }
+
+    public String fetch(){
+        return api.getData();
+    }
+}
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ServiceTest {
+
+    @Test
+    void testFetch(){
+
+        ExternalApi api = mock(ExternalApi.class);
+
+        when(api.getData()).thenReturn("Success");
+
+        Service s = new Service(api);
+
+        assertEquals("Success",s.fetch());
+    }
+}
+//Mockito – Verifying Interactions
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+
+public class VerifyTest {
+
+    @Test
+    void testVerify(){
+
+        ExternalApi api = mock(ExternalApi.class);
+
+        when(api.getData()).thenReturn("Hello");
+
+        Service s = new Service(api);
+
+        s.fetch();
+
+        verify(api).getData();
+    }
+}
+//SLF4J Logging Framework – Logging Error Messages and Warning Levels
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>2.0.13</version>
+</dependency>
+
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>2.0.13</version>
+</dependency>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LoggingExample {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoggingExample.class);
+
+    public static void main(String[] args) {
+
+        logger.info("Application Started");
+
+        logger.warn("Low Memory Warning");
+
+        logger.error("Database Connection Failed");
+
+        logger.debug("Debug Message");
+
+        logger.trace("Trace Message");
+    }
+}
