@@ -1,1 +1,104 @@
+Spring REST using Spring Boot 3
+//25. Create a Spring Web Project using Maven
+<packaging>war</packaging>
 
+<dependencies>
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>5.3.30</version>
+</dependency>
+
+</dependencies>
+//26. Spring Core – Load Country from Spring Configuration XML
+public class Country {
+
+    private String code;
+
+    private String name;
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void display() {
+        System.out.println(code + " " + name);
+    }
+}
+<bean id="country" class="com.example.Country">
+
+    <property name="code" value="IN"/>
+
+    <property name="name" value="India"/>
+
+</bean>
+ApplicationContext context =
+new ClassPathXmlApplicationContext("applicationContext.xml");
+
+Country c = context.getBean(Country.class);
+
+c.display();
+//27. Hello World RESTful Web Service
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello World";
+    }
+}
+
+// 28. REST – Country Web Service
+public class Country {
+
+    private String code;
+
+    private String name;
+
+    public Country(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+@RestController
+public class CountryController {
+
+    @GetMapping("/country")
+    public Country getCountry() {
+
+        return new Country("IN","India");
+    }
+}
+//REST – Get Country Based on Country Code
+@RestController
+@RequestMapping("/countries")
+public class CountryController {
+
+    @GetMapping("/{code}")
+    public Country getCountry(@PathVariable String code) {
+
+        if(code.equalsIgnoreCase("IN"))
+            return new Country("IN","India");
+
+        if(code.equalsIgnoreCase("US"))
+            return new Country("US","United States");
+
+        return new Country("NA","Not Found");
+    }
+}
