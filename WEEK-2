@@ -1,1 +1,161 @@
+//SPRING CORE AND MAVEN
+//Exercise 1: Configuring a Basic Spring Application
+package com.example;
+
+public class HelloWorld {
+
+    public void display() {
+        System.out.println("Hello Spring!");
+    }
+}
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="hello" class="com.example.HelloWorld"/>
+
+</beans>
+package com.example;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class App {
+
+    public static void main(String[] args) {
+
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        HelloWorld hello = context.getBean("hello", HelloWorld.class);
+
+        hello.display();
+    }
+}
+//Exercise 2: Implementing Dependency Injection
+package com.example;
+
+public class Address {
+
+    private String city;
+
+    public Address(String city) {
+        this.city = city;
+    }
+
+    public String getCity() {
+        return city;
+    }
+}
+package com.example;
+
+public class Employee {
+
+    private Address address;
+
+    public Employee(Address address) {
+        this.address = address;
+    }
+
+    public void show() {
+        System.out.println(address.getCity());
+    }
+}
+<bean id="address" class="com.example.Address">
+    <constructor-arg value="Hyderabad"/>
+</bean>
+
+<bean id="employee" class="com.example.Employee">
+    <constructor-arg ref="address"/>
+</bean>
+ApplicationContext context =
+        new ClassPathXmlApplicationContext("applicationContext.xml");
+
+Employee emp = context.getBean(Employee.class);
+
+emp.show();
+//18. Exercise 4: Creating and Configuring a Maven Project
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+
+    <artifactId>Spring_Core_Maven</artifactId>
+
+    <version>1.0</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.3.30</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
+//19. Spring Data JPA - Quick Example
+<dependencies>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+    </dependency>
+
+</dependencies>
+import jakarta.persistence.*;
+
+@Entity
+public class Country {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String code;
+
+    private String name;
+
+    public Country() {}
+
+    public Country(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    // getters and setters
+}
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CountryRepository extends JpaRepository<Country,Integer> {
+
+}
+@Autowired
+CountryRepository repository;
+
+public void saveCountry() {
+
+    repository.save(new Country("IN","India"));
+
+    repository.findAll()
+            .forEach(System.out::println);
+}
+//20. Difference Between JPA, Hibernate and Spring Data JPA
+EntityManager.persist(country);
+Session session = sessionFactory.openSession();
+
+session.save(country);
+repository.save(country);
+
 
